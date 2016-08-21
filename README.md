@@ -1,2 +1,2 @@
-# produceDOM
-produceDOM能让你在javascript代码中生成虚拟DOM节点，加以修饰后插入到html中
+## ProduceDOM
+ProduceDOM能让你在javascript代码中生成虚拟DOM节点，加以修饰后插入到html中
