@@ -1,6 +1,8 @@
 ## ProduceDOM
 ProduceDOM能让你在javascript代码中生成虚拟DOM节点，加以修饰后插入到html中
+
 压缩后的ProduceDOM大小只有2kb，而且无任何依赖，当然你也可以作为jQuery的插件来使用它
+
 下面让我们来看看如何使用它
 
 你需要通过produce函数创建DOM节点
