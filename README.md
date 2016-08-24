@@ -56,6 +56,6 @@ produce还支持更便捷的链式写法
     
 如果你的文件里引入了jQuery，那么produce函数返回的DOM节点可以直接通过jQuery添加到页面中
 
-    $.satisfy('div a:5').prependTo('body');
+    $.produce('div a:5').prependTo('body');
     
 你可以利用ProduceDOM生成任何你想要的DOM节点，甚至做出一个完整的页面！
