@@ -26,7 +26,7 @@
 })(function(){
 
     var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,
-        exprRegex = {
+        regList = {
             ID: /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/,
             CLASS: /\.((?:[\w\u00c0-\uFFFF_-]|\\.)+)(?![^[\]]+])/g,
             NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF_-]|\\.)+)['"]*\]/,
@@ -36,13 +36,13 @@
             COMBINATOR: /^[>~+]$/
         },
         cache = {},
-        attrMap = {
+        attrList = {
             'for': 'htmlFor',
             'class': 'className',
             'html': 'innerHTML'
         },
-        callbackTypes = ['ID','CLASS','NAME','ATTR'],
-        exprCallback = {
+        typeList = ['ID','CLASS','NAME','ATTR'],
+        exprList = {
             ID: function(match, node) {
                 node.id = match[1];
             },
@@ -58,8 +58,8 @@
                 var attr = match[1],
                     val = match[4] || true;
 
-                if ( val === true || attr === 'innerHTML' || attrMap.hasOwnProperty(attr) ) {
-                    node[attrMap[attr] || attr] = val;
+                if ( val === true || attr === 'innerHTML' || attrList.hasOwnProperty(attr) ) {
+                    node[attrList[attr] || attr] = val;
                 } else {
                     node.setAttribute( attr, val );
                 }
@@ -69,16 +69,16 @@
 
     function create(part, n) {
 
-        var tag = exprRegex.TAG.exec(part),
+        var tag = regList.TAG.exec(part),
             node = document.createElement( tag && tag[1] !== '*' ? tag[1] : 'div' ),
             fragment = document.createDocumentFragment(),
-            c = callbackTypes.length,
+            c = typeList.length,
             match, regex, callback;
 
         while (c--) {
 
-            regex = exprRegex[callbackTypes[c]];
-            callback = exprCallback[callbackTypes[c]];
+            regex = regList[typeList[c]];
+            callback = exprList[typeList[c]];
 
             if (regex.global) {
 
@@ -104,7 +104,7 @@
 
     }
 
-    function multiAppend(parents, children) {
+    function appendMore(parents, children) {
 
         parents = parents.childNodes;
 
@@ -153,13 +153,13 @@
 
             curSelector = selectorParts[nParts];
 
-            if (exprRegex.COMBINATOR.test(curSelector)) {
+            if (regList.COMBINATOR.test(curSelector)) {
                 isSibling = curSelector === '~' || curSelector === '+';
                 continue;
             }
 
             // clones数字需要大于等于1
-            nClones = (cloneMatch = curSelector.match(exprRegex.CLONE)) ? ~~cloneMatch[1] : 1;
+            nClones = (cloneMatch = curSelector.match(regList.CLONE)) ? ~~cloneMatch[1] : 1;
 
             prevChildren = children;
             children = create(curSelector, nClones);
@@ -170,7 +170,7 @@
                     children.appendChild(prevChildren);
                     isSibling = false;
                 } else {
-                    multiAppend(children, prevChildren);
+                    appendMore(children, prevChildren);
                 }
 
             }
