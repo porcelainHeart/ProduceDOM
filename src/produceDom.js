@@ -35,14 +35,13 @@
             CLONE: /\:(\d+)(?=$|[:[])/,
             COMBINATOR: /^[>~+]$/
         },
-        cache = {},
         attrList = {
             'for': 'htmlFor',
             'class': 'className',
             'html': 'innerHTML'
         },
         typeList = ['ID','CLASS','NAME','ATTR'],
-        exprList = {
+        funcList = {
             ID: function(match, node) {
                 node.id = match[1];
             },
@@ -73,25 +72,25 @@
             node = document.createElement( tag && tag[1] !== '*' ? tag[1] : 'div' ),
             fragment = document.createDocumentFragment(),
             c = typeList.length,
-            match, regex, callback;
+            match, reg, func;
 
         while (c--) {
 
-            regex = regList[typeList[c]];
-            callback = exprList[typeList[c]];
+            reg = regList[typeList[c]];
+            func = funcList[typeList[c]];
 
-            if (regex.global) {
+            if (reg.global) {
 
-                while ( (match = regex.exec(part)) !== null ) {
-                    callback( match, node );
+                while ( (match = reg.exec(part)) !== null ) {
+                    func( match, node );
                 }
 
                 continue;
 
             }
 
-            if (match = regex.exec(part)) {
-                callback( match, node );
+            if (match = reg.exec(part)) {
+                func( match, node );
             }
 
         }
@@ -108,12 +107,11 @@
 
         parents = parents.childNodes;
 
-        var i = parents.length,
-            parent;
+        var leng = parents.length, parent;
 
-        while ( i-- ) {
+        while ( leng-- ) {
 
-            parent = parents[i];
+            parent = parents[leng];
 
             if (parent.nodeName.toLowerCase() === 'table') {
 
@@ -127,48 +125,44 @@
     }
 
     function produce(selector) {
-
-        if (selector in cache) {
-            return cache[selector].cloneNode(true).childNodes;
-        }
-
+        
         var selectorParts = [],
             fragment = document.createDocumentFragment(),
             children,
             prevChildren,
-            curSelector,
-            nClones = 1,
-            nParts = 0,
-            isSibling = false,
+            corSelector,
+            times = 1,
+            n = 0,
+            borderType = false,
             cloneMatch,
             m;
 
         while ( (m = chunker.exec(selector)) !== null ) {
-            ++nParts;
+            ++n;
             selectorParts.push(m[1]);
         }
 
         // 反向
-        while (nParts--) {
+        while (n--) {
 
-            curSelector = selectorParts[nParts];
+            corSelector = selectorParts[n];
 
-            if (regList.COMBINATOR.test(curSelector)) {
-                isSibling = curSelector === '~' || curSelector === '+';
+            if (regList.COMBINATOR.test(corSelector)) {
+                borderType = corSelector === '~' || corSelector === '+';
                 continue;
             }
 
             // clones数字需要大于等于1
-            nClones = (cloneMatch = curSelector.match(regList.CLONE)) ? ~~cloneMatch[1] : 1;
+            times = (cloneMatch = corSelector.match(regList.CLONE)) ? ~~cloneMatch[1] : 1;
 
             prevChildren = children;
-            children = create(curSelector, nClones);
+            children = create(corSelector, times);
 
             if (prevChildren) {
 
-                if (isSibling) {
+                if (borderType) {
                     children.appendChild(prevChildren);
-                    isSibling = false;
+                    borderType = false;
                 } else {
                     appendMore(children, prevChildren);
                 }
@@ -179,13 +173,11 @@
 
         fragment.appendChild(children);
 
-        cache[selector] = fragment.cloneNode(true);
 
         return fragment.childNodes;
 
     }
 
-    produce.cache = cache;
 
     return produce;
 });
