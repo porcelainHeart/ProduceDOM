@@ -9,7 +9,7 @@ ProduceDOM能让你在javascript代码中生成虚拟DOM节点，加以修饰后
 你需要通过produce函数创建DOM节点。
 
     produce(selector);
-produce函数只接收一个参数，这个参数是一个类似于css选择器的形式。
+produce函数只接收一个参数，这个参数是一个类似于css选择器的形式的字符串。
 
     produce("div p");
 然后produce函数会返回一个nodeList，里面是你所期望的DOM节点
