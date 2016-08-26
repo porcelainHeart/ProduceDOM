@@ -66,3 +66,5 @@ produce还支持更便捷的链式写法
     $.produce('div a:5').prependTo('body');
 ---    
 你可以利用ProduceDOM生成任何你想要的DOM节点，甚至做出一个完整的页面！
+
+ProduceDOM主要完成的是View层的工作，你可以结合我的另一个库Binding.js来使用，组合成一个完整的MVC架构。
