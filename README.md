@@ -55,7 +55,7 @@ produce还支持更便捷的链式写法
 
     <div class="test nav top" id="header"></div> // 如果你试图添加多个id，不会报错，只会获得第一个id
 ---
-可能你需要给DOM节点添加样式和文本,你可以把这些内容使用中括号隔开，就像在html内写行内样式一样
+可能你需要给DOM节点添加样式和文本,你可以把这些内容使用中括号隔开，就像在html内写行内样式一样。
 
     produce("div[style="width:30px"][html="demo"]");
     
