@@ -41,7 +41,7 @@ produce函数支持一些便捷的写法
       </ul>
     </div>
 ---
-当然produce也支持属性的添加
+当然produce也支持属性的添加。
 
     produce("div.test");
 结果是这样
