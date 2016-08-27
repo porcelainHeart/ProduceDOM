@@ -61,7 +61,7 @@ produce还支持更便捷的链式写法
     
     <div style="width:30px">demo</div>
 --- 
-如果你的文件里引入了jQuery，那么produce函数返回的DOM节点可以直接通过jQuery添加到页面中
+如果你的文件里引入了jQuery，那么produce函数返回的DOM节点可以直接通过jQuery添加到页面中。
 
     $.produce('div a:5').prependTo('body');
 ---    
