@@ -2,9 +2,9 @@
 (function (valProduce) {
     var produce = valProduce();
 
-    // CommonJS
+    // npm
     if (typeof exports === "object") {
-        module.exports = produce;
+        exports.produce = produce;
 
     // RequireJS
     } else if (typeof define === "function" && define.amd) {
